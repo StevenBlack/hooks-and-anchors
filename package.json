@@ -1,0 +1,32 @@
+{
+  "name": "Hooks-And-Anchors",
+  "version": "0.0.0",
+  "description": "",
+  "license": "MIT",
+  "repository": "https://github.com/StevenBlack/hooks-and-anchors",
+  "author": {
+    "name": "Steven Black",
+    "email": "steveb@stevenblack.com",
+    "url": "http://stevenblack.com"
+  },
+  "engines": {
+    "node": ">=4"
+  },
+  "scripts": {
+    "test": "xo && ava"
+  },
+  "files": [
+    "index.js"
+  ],
+  "keywords": [
+    ""
+  ],
+  "dependencies": {},
+  "devDependencies": {
+    "ava": "^0.15.0",
+    "xo": "^0.16.0"
+  },
+  "xo": {
+    "esnext": true
+  }
+}
