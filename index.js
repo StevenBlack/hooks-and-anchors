@@ -1,16 +1,18 @@
 'use strict';
 
 class Hook {
-  constructor(options = {}) {
+  constructor(options) {
     this.defaults = {};
     this.hook = undefined;
     this.settings = options;
   }
-  execute() {}
-  process(options) {
-    if (this.preProcess(options)) {
-      this.execute(options);
-      this.postProcess(options);
+  execute(thing) {
+    console.dir(thing);
+  }
+  process(thing) {
+    if (this.preProcess(thing)) {
+      this.execute(thing);
+      this.postProcess(thing);
     }
   }
   preProcess() {}
