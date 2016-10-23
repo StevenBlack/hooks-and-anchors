@@ -28,3 +28,29 @@ describe('Hook standalone functionality', function(){
     expect(hook.isHook(hook.hook)).to.equal(true);
   });
 });
+
+describe('Hook chain functionality', function(){
+  class TallyHook extends hookModule.Hook {
+    preProcess(thing) {
+      thing.preTally = thing.preTally ? thing.preTally + 1 : 1;
+      return true;
+    }
+
+    postProcess(thing) {
+      thing.postTally = thing.postTally ? thing.postTally + 1 : 1;
+    }
+  }
+
+  it("Hook methods all fire", function(){
+    let obj = {};
+    const hook= new hookModule.Hook();
+    const hookA= new TallyHook();
+    const hookB= new TallyHook();
+    hook.setHook(hookA).setHook(hookB);
+    hook.process(obj);
+
+    expect(obj.preTally).to.equal(2);
+    expect(obj.postTally).to.equal(2);
+  });
+});
+
