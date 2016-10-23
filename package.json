@@ -17,12 +17,7 @@
     "lib": "lib"
   },
   "scripts": {
-    "release:patch": "npm version patch && npm publish",
-    "release:minor": "npm version minor && npm publish",
-    "release:major": "npm version major && npm publish",
-    "release:prerelease": "npm version prerelease && npm publish --tag pegasus",
-    "lint": "eslint-if-supported semistandard --fix",
-    "mocha": "mocha --opts mocha.opts"
+     "mocha": "mocha --opts mocha.opts"
   },
   "semistandard": {
     "env": [
