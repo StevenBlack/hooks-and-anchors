@@ -17,7 +17,7 @@
     "lib": "lib"
   },
   "scripts": {
-     "mocha": "mocha --opts mocha.opts"
+    "mocha": "mocha --opts mocha.opts"
   },
   "semistandard": {
     "env": [
@@ -38,12 +38,13 @@
     "babel-core": "6.17.0",
     "babel-plugin-add-module-exports": "0.2.1",
     "babel-preset-es2015": "6.16.0",
+    "chai": "^3.5.0",
     "eslint": "^3.8.1",
     "eslint-config-standard": "^6.2.0",
     "eslint-if-supported": "1.0.1",
     "eslint-plugin-promise": "^3.3.0",
     "eslint-plugin-standard": "^2.0.1",
     "jshint": "2.9.4",
-    "mocha": "3.1.2"
+    "mocha": "^3.1.2"
   }
 }
