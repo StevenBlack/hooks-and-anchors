@@ -2,7 +2,7 @@
 
 class Hook {
   constructor(options) {
-    this.name = options ? ( options.name ? options.name : 'Hook' ) : 'Hook';
+    this.name = options ? (options.name ? options.name : 'Hook') : 'Hook';
     this.flags = {
       execute: true,
       hook: true,
@@ -42,14 +42,13 @@ class Hook {
     } else {
       this.hook = hook;
     }
+
     return hook;
   }
 
   setFlags(flag = true) {
     for (const key in this.flags) {
-      if (true) {
-        this.flags[key] = flag;
-      }
+      this.flags[key] = flag;
     }
   }
 
