@@ -2,7 +2,8 @@
 
 class Hook {
   constructor(options) {
-    this.name = options ? (options.name ? options.name : 'Hook') : 'Hook';
+    options = options || {};
+    this.name = options.name ? options.name : 'Hook';
     this.flags = {
       execute: true,
       hook: true,
@@ -34,7 +35,7 @@ class Hook {
     return true;
   }
 
-  postProcess() {}
+  postProcess(thing) {}
 
   setHook(hook) {
     if (this.isHook(this.hook)) {
@@ -60,9 +61,28 @@ class Hook {
 
 class Anchor extends Hook {
   constructor(options) {
+    options = options || {};
     super(options);
-    this.name = options.name || 'HookAnchor';
+    this.name = options.name ? options.name : 'Anchor';
     this.hooks = [];
+  }
+
+  process(thing) {
+    this.setFlags(true);
+    if (this.preProcess(thing)) {
+      if (this.flags.execute) {
+        this.execute(thing);
+      }
+    }
+    if (this.flags.hook && this.isHook(this.hook)) {
+      this.hook.process(thing);
+      this.hooks.forEach( function(hook){
+        hook.process(thing);
+      });
+    }
+    if (this.flags.postProcess) {
+      this.postProcess(thing);
+    }
   }
 }
 
