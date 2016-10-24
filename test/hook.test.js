@@ -1,25 +1,26 @@
 const assert = require('chai').assert;
 const expect = require('chai').expect;
+const should = require('should');
 const Hook = require('../src/').Hook;
 const TallyHook = require('./common.js').TallyHook;
 
 describe('Hook standalone functionality', function(){
   it('hook default name is "Hook"', function(){
     const hook = new Hook();
-    expect(hook.name).to.equal('Hook');
+    hook.should.have.property('name', 'Hook');
   });
 
   it('hook has assigned name', function(){
     const hook = new Hook({name:'foo'});
-    expect(hook.name).to.equal('foo');
+    hook.should.have.property('name', 'foo');
   });
 
   it('Hook process flags are all true', function(){
     const hook = new Hook();
-    const f = hook.flags;
-    expect(f.execute).to.equal(true);
-    expect(f.hook).to.equal(true);
-    expect(f.postProcess).to.equal(true);
+    const flags = hook.flags;
+    flags.should.have.property('execute', true);
+    flags.should.have.property('hook', true);
+    flags.should.have.property('postProcess', true);
   });
 
   it('Hook added by setHook method', function(){
@@ -39,8 +40,8 @@ describe('Hook chain functionality', function(){
     hook.setHook(hookA).setHook(hookB);
     hook.process(obj);
 
-    expect(obj.preTally).to.equal(3);
-    expect(obj.postTally).to.equal(3);
+    obj.should.have.property('preTally', 3);
+    obj.should.have.property('postTally', 3);
   });
 });
 

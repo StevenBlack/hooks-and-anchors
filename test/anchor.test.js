@@ -1,25 +1,26 @@
 const assert = require('chai').assert;
 const expect = require('chai').expect;
+const should = require('should');
 const Anchor = require('../src/').Anchor;
 const TallyHook = require('./common.js').TallyHook;
 
 describe('Anchor standalone functionality', function(){
   it('anchor default name is "Anchor"', function(){
     const anchor = new Anchor();
-    expect(anchor.name).to.equal('Anchor');
+    anchor.should.have.property('name', 'Anchor');
   });
 
   it('anchor has assigned name', function(){
     const anchor = new Anchor({name:'foo'});
-    expect(anchor.name).to.equal('foo');
+    anchor.should.have.property('name', 'foo');
   });
 
   it('anchor process flags are all true', function(){
     const anchor = new Anchor();
-    const f = anchor.flags;
-    expect(f.execute).to.equal(true);
-    expect(f.hook).to.equal(true);
-    expect(f.postProcess).to.equal(true);
+    const flags = anchor.flags;
+    flags.should.have.property('execute', true);
+    flags.should.have.property('hook', true);
+    flags.should.have.property('postProcess', true);
   });
 
   it('anchor hook added by setHook method', function(){
@@ -32,7 +33,6 @@ describe('Anchor standalone functionality', function(){
 
 describe('Anchor array functionality', function(){
 
-
   it('array hook methods all fire', function(){
     let obj = {};
     const anchor = new Anchor();
@@ -44,7 +44,8 @@ describe('Anchor array functionality', function(){
     anchor.setHook(hookA);
     anchor.process(obj)
 
-    expect(obj.preTally).to.equal(4);
-    expect(obj.postTally).to.equal(4);
+    obj.should.have.property('preTally', 4);
+    obj.should.have.property('postTally', 4);
+
   });
 });
