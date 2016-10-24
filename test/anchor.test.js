@@ -30,18 +30,7 @@ describe('Anchor standalone functionality', function(){
 });
 
 describe('Anchor array functionality', function(){
-  class TallyHook extends hookModule.Hook {
-    preProcess(thing) {
-      thing.preTally = thing.preTally ? thing.preTally + 1 : 1;
-      return true;
-    }
 
-    postProcess(thing) {
-      thing.postTally = thing.postTally ? thing.postTally + 1 : 1;
-    }
-  }
-
-  it("array hook methods all fire", function(){
     let obj = {};
     const anchor= new hookModule.Anchor();
     const hookA= new TallyHook();

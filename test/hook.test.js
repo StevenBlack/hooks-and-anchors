@@ -30,17 +30,6 @@ describe('Hook standalone functionality', function(){
 });
 
 describe('Hook chain functionality', function(){
-  class TallyHook extends hookModule.Hook {
-    preProcess(thing) {
-      thing.preTally = thing.preTally ? thing.preTally + 1 : 1;
-      return true;
-    }
-
-    postProcess(thing) {
-      thing.postTally = thing.postTally ? thing.postTally + 1 : 1;
-    }
-  }
-
   it("Hook methods all fire", function(){
     let obj = {};
     const hook= new hookModule.Hook();
