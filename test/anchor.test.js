@@ -1,6 +1,6 @@
 const assert = require('chai').assert;
 const expect = require('chai').expect;
-const Anchor = require('../').Anchor;
+const Anchor = require('../src/').Anchor;
 const TallyHook = require('./common.js').TallyHook;
 
 describe('Anchor standalone functionality', function(){

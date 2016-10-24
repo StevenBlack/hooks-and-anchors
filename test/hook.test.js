@@ -1,7 +1,6 @@
 const assert = require('chai').assert;
 const expect = require('chai').expect;
-const hookModule = require('../');
-const Hook = require('../').Hook;
+const Hook = require('../src/').Hook;
 const TallyHook = require('./common.js').TallyHook;
 
 describe('Hook standalone functionality', function(){

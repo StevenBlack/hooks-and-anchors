@@ -1,4 +1,4 @@
-const hookModule = require("../");
+const hookModule = require("../src/");
 class TallyHook extends hookModule.Hook {
   preProcess(thing) {
     thing.preTally = thing.preTally ? thing.preTally + 1 : 1;
