@@ -1,5 +1,5 @@
 {
-  "name": "Hooks-And-Anchors",
+  "name": "hooks-and-anchors",
   "version": "0.0.2",
   "description": "",
   "license": "MIT",
@@ -36,6 +36,7 @@
   "files": [
     "/src/index.js"
   ],
+  "main": "lib/index.js",
   "keywords": [
     ""
   ],
