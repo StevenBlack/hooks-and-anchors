@@ -33,9 +33,6 @@
       "mocha"
     ]
   },
-  "files": [
-    "/src/index.js"
-  ],
   "main": "lib/index.js",
   "keywords": [
     ""
