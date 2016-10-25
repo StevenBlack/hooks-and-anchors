@@ -41,7 +41,10 @@ class Hook {
     if (this.isHook(this.hook)) {
       this.hook.setHook(hook);
     } else {
-      this.hook = hook;
+      // only allow hooks as hooks
+      if (this.isHook(hook)) {
+        this.hook = hook;
+      }
     }
 
     return hook;
