@@ -92,8 +92,17 @@ class Anchor extends Hook {
     // process the hook chain next
     if (this.flags.hook && this.isHook(this.hook)) {
       this.hook.process(thing);
-      this.hooks.forEach( (hook) => hook.process(thing) );
     }
+
+    // finally process the hook array
+    if(this.flags.hook && this.hooks.length > 0){
+      this.hooks.forEach( (hook) => {
+        if (this.isHook(hook)) {
+          hook.process(thing);
+        }
+      });
+    }
+
     if (this.flags.postProcess) {
       this.postProcess(thing);
     }
