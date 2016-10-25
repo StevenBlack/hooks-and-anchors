@@ -57,3 +57,13 @@ describe('Class instance from string', function(){
     obj.should.have.property('name', 'foo');
   });
 });
+
+describe('Passing a class name to setHook()', function(){
+  it('creates instance as expected', function(){
+    const myString = "../test/myhookclass";
+    const hook = new Hook();
+    let obj= hook.setHook(myString)
+    expect(hook.isHook(obj)).to.equal(true);
+    obj.should.have.property('name', 'Hook');
+  });
+});

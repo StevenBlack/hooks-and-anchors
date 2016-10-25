@@ -41,12 +41,15 @@ class Hook {
     if (this.isHook(this.hook)) {
       this.hook.setHook(hook);
     } else {
+      // hook could be a package name
+      if(typeof hook === 'string' ) {
+        return this.setHook(this.classInstanceFromString(hook));
+      }
       // only allow hooks as hooks
       if (this.isHook(hook)) {
         this.hook = hook;
       }
     }
-
     return hook;
   }
 
