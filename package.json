@@ -1,6 +1,6 @@
 {
   "name": "hooks-and-anchors",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "",
   "license": "MIT",
   "repository": "https://github.com/StevenBlack/hooks-and-anchors",
@@ -33,7 +33,11 @@
       "mocha"
     ]
   },
-  "files": ["./lib", "./test", "./src"],
+  "files": [
+    "./lib",
+    "./test",
+    "./src"
+  ],
   "main": "./lib/index.js",
   "keywords": [
     ""
