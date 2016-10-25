@@ -14,7 +14,6 @@ class Hook {
     this.settings = options;
   }
 
-  execute(thing) {}
 
   process(thing) {
     this.setFlags(true);
@@ -34,6 +33,8 @@ class Hook {
   preProcess(thing) {
     return true;
   }
+
+  execute(thing) {}
 
   postProcess(thing) {}
 
