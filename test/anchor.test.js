@@ -46,6 +46,5 @@ describe('Anchor array functionality', function(){
 
     obj.should.have.property('preTally', 4);
     obj.should.have.property('postTally', 4);
-
   });
 });

@@ -45,3 +45,15 @@ describe('Hook chain functionality', function(){
   });
 });
 
+describe('Class instance from string', function(){
+  it('creates instance as expected', function(){
+    const myString = "../test/myclass";
+    const hook = new Hook();
+    let obj = hook.classInstanceFromString(myString);
+    obj.should.have.property('name', 'MyClass');
+    const J = require(myString);
+    obj.should.be.instanceof(J, 'The object should be of the extpected instanceOf.');
+    obj = hook.classInstanceFromString(myString, {'name': 'foo'});
+    obj.should.have.property('name', 'foo');
+  });
+});

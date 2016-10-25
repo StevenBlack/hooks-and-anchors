@@ -57,6 +57,11 @@ class Hook {
     const type = typeof hook;
     return hook !== null && (type === 'object' || type === 'function') && ('hook' in hook);
   }
+
+  classInstanceFromString(packageLocation, ...a) {
+    const Temp = require(packageLocation);
+    return new Temp(...a);
+  }
 }
 
 class Anchor extends Hook {
