@@ -79,12 +79,17 @@ class Anchor extends Hook {
   }
 
   process(thing) {
+    // set all flags to signal go!
     this.setFlags(true);
+
+    // preProcess() controls whether this hook executes
     if (this.preProcess(thing)) {
       if (this.flags.execute) {
         this.execute(thing);
       }
     }
+
+    // process the hook chain next
     if (this.flags.hook && this.isHook(this.hook)) {
       this.hook.process(thing);
       this.hooks.forEach( (hook) => hook.process(thing) );
