@@ -1,3 +1,5 @@
+'use strict';
+
 const hookModule = require("../src/");
 class TallyHook extends hookModule.Hook {
   preProcess(thing) {
