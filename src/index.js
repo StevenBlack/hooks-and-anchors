@@ -2,18 +2,30 @@
 
 class Hook {
   constructor(options) {
+    // native properties of all hooks
     options = options || {};
-    this.name = options.name ? options.name : 'Hook';
+    this.name = options.name || 'Hook';
+    this.settings = {};
+    this.hook = undefined;
     this.flags = {
       execute: true,
       hook: true,
       postProcess: true
     };
-    this.defaults = {};
-    this.hook = undefined;
-    this.settings = options;
+
+    // reckon the settings
+    this.defaults = {
+      'name': 'Hook'
+    }
+    Object.assign(this.settings, this.defaults, options);
+    this.selfConfig();
   }
 
+  selfConfig() {
+    if(this.settings.name) {
+      this.name = this.settings.name;
+    }
+  }
 
   process(thing) {
     this.setFlags(true);
@@ -74,8 +86,8 @@ class Hook {
 class Anchor extends Hook {
   constructor(options) {
     options = options || {};
+    options.name = options.name || 'Anchor';
     super(options);
-    this.name = options.name ? options.name : 'Anchor';
     this.hooks = [];
   }
 
