@@ -28,18 +28,30 @@ class Hook {
   }
 
   process(thing) {
+    // set all flags to signal go!
     this.setFlags(true);
-    if (this.preProcess(thing)) {
-      if (this.flags.execute) {
-        this.execute(thing);
+
+    // preProcess() controls whether this hook executes
+    return new Promise((resolve,reject) => resolve(this.preProcess(thing)))
+    .then((preProcessResult) => {
+      if (preProcessResult) {
+        if (this.flags.execute) {
+          return this.execute(thing);
+        }
       }
-    }
-    if (this.flags.hook && this.isHook(this.hook)) {
-      this.hook.process(thing);
-    }
-    if (this.flags.postProcess) {
-      this.postProcess(thing);
-    }
+    })
+    .then(() => {
+      // down the hook chain
+      if (this.flags.hook && this.isHook(this.hook)) {
+        return this.hook.process(thing);
+      }
+    })
+    .then(() => {
+      // fire the post process as appropriate
+      if (this.flags.postProcess) {
+        return this.postProcess(thing);
+      }
+    });
   }
 
   preProcess(thing) {
@@ -96,29 +108,36 @@ class Anchor extends Hook {
     this.setFlags(true);
 
     // preProcess() controls whether this hook executes
-    if (this.preProcess(thing)) {
-      if (this.flags.execute) {
-        this.execute(thing);
-      }
-    }
-
-    // process the hook chain next
-    if (this.flags.hook && this.isHook(this.hook)) {
-      this.hook.process(thing);
-    }
-
-    // finally process the hook array
-    if(this.flags.hook && this.hooks.length > 0){
-      this.hooks.forEach( (hook) => {
-        if (this.isHook(hook)) {
-          hook.process(thing);
+    return new Promise((resolve,reject) => resolve(this.preProcess(thing)))
+    .then((preProcessResult) => {
+      if (preProcessResult) {
+        if (this.flags.execute) {
+          return this.execute(thing);
         }
-      });
-    }
-
-    if (this.flags.postProcess) {
-      this.postProcess(thing);
-    }
+      }
+    })
+    .then(() => {
+      // down the hook chain
+      if (this.flags.hook && this.isHook(this.hook)) {
+        return this.hook.process(thing);
+      }
+    })
+    .then(() => {
+      // process the hook array
+      if(this.flags.hook && this.hooks.length > 0){
+        this.hooks.forEach( (hook) => {
+          if (this.isHook(hook)) {
+            hook.process(thing);
+          }
+        });
+      }
+    })
+    .then(() => {
+      // fire the post process as appropriate
+      if (this.flags.postProcess) {
+        return this.postProcess(thing);
+      }
+    });
   }
 }
 
