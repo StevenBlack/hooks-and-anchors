@@ -32,25 +32,35 @@ class Hook {
     this.setFlags(true);
 
     // preProcess() controls whether this hook executes
-    return new Promise((resolve,reject) => resolve(this.preProcess(thing)))
+    return new Promise((resolve,reject) => resolve(this.preProcess(thing)).catch(reject))
     .then((preProcessResult) => {
       if (preProcessResult) {
         if (this.flags.execute) {
-          return this.execute(thing);
+          return new Promise((resolve, reject) => {
+            return resolve(this.execute(thing)).catch(reject);
+          });
         }
       }
+      return new Promise((resolve, reject) => {return resolve();});
     })
     .then(() => {
       // down the hook chain
       if (this.flags.hook && this.isHook(this.hook)) {
-        return this.hook.process(thing);
+        return new Promise((resolve, reject) => {
+          return this.hook.process(thing).then(resolve).catch(reject);
+        });
+      } else {
+        return new Promise((resolve, reject) => {return resolve();});
       }
     })
     .then(() => {
       // fire the post process as appropriate
       if (this.flags.postProcess) {
-        return this.postProcess(thing);
+        return new Promise((resolve, reject) => {
+          return this.postProcess(thing);
+        });
       }
+      return new Promise((resolve, reject) => {return resolve();});
     });
   }
 
@@ -63,6 +73,7 @@ class Hook {
   postProcess(thing) {}
 
   setHook(hook) {
+    // append a hook to the hook chain.
     if (this.isHook(this.hook)) {
       this.hook.setHook(hook);
     } else {
@@ -108,18 +119,25 @@ class Anchor extends Hook {
     this.setFlags(true);
 
     // preProcess() controls whether this hook executes
-    return new Promise((resolve,reject) => resolve(this.preProcess(thing)))
+    return new Promise((resolve,reject) => resolve(this.preProcess(thing)).catch(reject))
     .then((preProcessResult) => {
       if (preProcessResult) {
         if (this.flags.execute) {
-          return this.execute(thing);
+          return new Promise((resolve, reject) => {
+            return resolve(this.execute(thing)).catch(reject);
+          });
         }
       }
+      return new Promise((resolve, reject) => {return resolve();});
     })
     .then(() => {
       // down the hook chain
       if (this.flags.hook && this.isHook(this.hook)) {
-        return this.hook.process(thing);
+        return new Promise((resolve, reject) => {
+          return this.hook.process(thing).then(resolve).catch(reject);
+        });
+      } else {
+        return new Promise((resolve, reject) => {return resolve();});
       }
     })
     .then(() => {
@@ -131,12 +149,16 @@ class Anchor extends Hook {
           }
         });
       }
+      return new Promise((resolve, reject) => {return resolve();});
     })
     .then(() => {
       // fire the post process as appropriate
       if (this.flags.postProcess) {
-        return this.postProcess(thing);
+        return new Promise((resolve, reject) => {
+          return this.postProcess(thing);
+        });
       }
+      return new Promise((resolve, reject) => {return resolve();});
     });
   }
 }
