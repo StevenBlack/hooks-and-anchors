@@ -35,15 +35,19 @@ describe('Hook standalone functionality', function(){
 
 describe('Hook chain functionality', function(){
   it('Hook methods all fire', function(){
-    let obj = {};
+    let obj = {
+      preTally: 0,
+      postTally: 0
+    };
     const hook = new TallyHook();
     const hookA = new TallyHook();
     const hookB = new TallyHook();
     hook.setHook(hookA).setHook(hookB);
-    hook.process(obj);
-
-    obj.should.have.property('preTally', 3);
-    obj.should.have.property('postTally', 3);
+    let p = new Promise((resolve, reject) => resolve(hook.process(obj)));
+    p.then(() => {
+      obj.should.have.property('preTally', 3);
+      obj.should.have.property('postTally', 3);
+    });
   });
 });
 

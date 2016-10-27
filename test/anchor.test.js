@@ -34,19 +34,29 @@ describe('Anchor standalone functionality', function(){
 });
 
 describe('Anchor array functionality', function(){
-
   it('array hook methods all fire', function(){
-    let obj = {};
+    let obj = {
+      preTally: 0,
+      postTally: 0
+    };
     const anchor = new Anchor();
     const hookA = new TallyHook();
+    const hookB = new TallyHook();
+    const hookC = new TallyHook();
+    const hookD = new TallyHook();
+    const hookE = new TallyHook();
 
     anchor.hooks.push(hookA);
-    anchor.hooks.push(hookA);
-    anchor.hooks.push(hookA);
-    anchor.setHook(hookA);
-    anchor.process(obj)
+    anchor.hooks.push(hookB);
+    anchor.hooks.push(hookC);
+    anchor.setHook(hookD);
+    anchor.setHook(hookE);
 
-    obj.should.have.property('preTally', 4);
-    obj.should.have.property('postTally', 4);
+    let p = new Promise((resolve, reject) => resolve(anchor.process(obj)));
+    p.then(() => {
+      obj.should.have.property('preTally', 5);
+      obj.should.have.property('postTally', 5);
+    });
   });
+
 });
