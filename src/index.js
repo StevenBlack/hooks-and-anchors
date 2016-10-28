@@ -41,7 +41,7 @@ class Hook {
           });
         }
       }
-      return new Promise((resolve, reject) => {return resolve();});
+      return new Promise.resolve();
     })
     .then(() => {
       // down the hook chain
@@ -50,7 +50,7 @@ class Hook {
           return this.hook.process(thing).then(resolve).catch(reject);
         });
       } else {
-        return new Promise((resolve, reject) => {return resolve();});
+        return new Promise.resolve();
       }
     })
     .then(() => {
@@ -60,7 +60,7 @@ class Hook {
           return this.postProcess(thing);
         });
       }
-      return new Promise((resolve, reject) => {return resolve();});
+      return new Promise.resolve();
     });
   }
 
