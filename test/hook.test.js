@@ -5,6 +5,7 @@ const expect = require('chai').expect;
 const should = require('should');
 const Hook = require('../src/').Hook;
 const TallyHook = require('./common.js').TallyHook;
+const DelayableHook = require('./common.js').DelayableHook;
 
 describe('Hook standalone functionality', function(){
   it('hook default name is "Hook"', function(){
@@ -71,5 +72,12 @@ describe('Passing a class name to setHook()', function(){
     let obj= hook.setHook(myString)
     expect(hook.isHook(obj)).to.equal(true);
     obj.should.have.property('name', 'Hook');
+  });
+});
+
+describe('Hook execution sequence', function(){
+  it('is as expected', function(){
+    const hook = new DelayableHook();
+    hook.process();
   });
 });
