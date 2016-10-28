@@ -44,11 +44,16 @@ describe('Hook chain functionality', function(){
     const hookA = new TallyHook();
     const hookB = new TallyHook();
     hook.setHook(hookA).setHook(hookB);
-    let p = new Promise((resolve, reject) => resolve(hook.process(obj)));
+    let p = new Promise((resolve,reject) => {
+      resolve(hook.process(obj));
+    });
     p.then(() => {
       obj.should.have.property('preTally', 3);
       obj.should.have.property('postTally', 3);
-    });
+    })
+    .catch((err) =>{
+      console.dir(err);
+    });;
   });
 });
 
@@ -77,7 +82,15 @@ describe('Passing a class name to setHook()', function(){
 
 describe('Hook execution sequence', function(){
   it('is as expected', function(){
-    const hook = new DelayableHook();
-    hook.process();
+    const hook1 = new DelayableHook();
+    const hook2 = new DelayableHook();
+    hook1.setHook(hook2);
+    let thing = {};
+    let p = hook1.process(thing);
+    console.dir(p);
+    p.then(() => {console.dir(thing);})
+    .catch((err) =>{
+      console.dir(err);
+    });;
   });
 });

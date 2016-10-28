@@ -15,27 +15,38 @@ class TallyHook extends hookModule.Hook {
 
 class DelayableHook extends hookModule.Hook {
   constructor(options) {
-    super(options)
+    super(options);
+    this.depth = 0;
   }
 
-  preProcess() {
+  setHook(hook) {
+    if (this.isHook(hook)){
+      hook.depth = hook.depth + 1;
+    }
+    super.setHook(hook);
+  }
+
+  preProcess(thing) {
+    thing[this.name] = thing[this.name] || [];
     this.delay( this.settings.preprocess || 500, "preProcess");
     return true
   }
 
-  execute() {
+  execute(thing) {
     this.delay(this.settings.execute || 200, "execute");
   }
 
-  postProcess() {
+  postProcess(thing) {
     this.delay(this.settings.postprocess || 100, "postProcess");
   }
 
 
   delay(ms, str){
     var ctr, rej, p = new Promise((resolve, reject) => {
+        console.log( `setting Hook ${this.depth} delayed ${str} by ${ms}ms`);
         ctr = setTimeout(() => {
           console.log( `delayed ${str} by ${ms}ms`)
+          thing[this.name].push(`Hook ${this.depth} ${str}`)
           resolve();
           }, ms);
         rej = reject;

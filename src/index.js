@@ -32,45 +32,40 @@ class Hook {
     this.setFlags(true);
 
     // preProcess() controls whether this hook executes
-    return new Promise((resolve,reject) => resolve(this.preProcess(thing)).catch(reject))
-    .then((preProcessResult) => {
-      if (preProcessResult) {
-        if (this.flags.execute) {
-          return new Promise((resolve, reject) => {
-            return resolve(this.execute(thing)).catch(reject);
-          });
+    return Promise.resolve(this.preProcess(thing))
+      .then((preProcessResult) => {
+        if (preProcessResult) {
+          if (this.flags.execute) {
+            return Promise.resolve(this.execute(thing));
+          }
         }
-      }
-      return new Promise.resolve();
-    })
-    .then(() => {
-      // down the hook chain
-      if (this.flags.hook && this.isHook(this.hook)) {
-        return new Promise((resolve, reject) => {
-          return this.hook.process(thing).then(resolve).catch(reject);
-        });
-      } else {
-        return new Promise.resolve();
-      }
-    })
-    .then(() => {
-      // fire the post process as appropriate
-      if (this.flags.postProcess) {
-        return new Promise((resolve, reject) => {
-          return this.postProcess(thing);
-        });
-      }
-      return new Promise.resolve();
-    });
+        return Promise.resolve(true);
+      })
+      .then(() => {
+        // down the hook chain
+        if (this.flags.hook && this.isHook(this.hook)) {
+          return Promise.resolve( this.hook.process(thing));
+        }
+      })
+      .then(() => {
+        // fire the post process as appropriate
+        if (this.flags.postProcess) {
+            return Promise.resolve(this.postProcess(thing));
+        }
+      });
   }
 
   preProcess(thing) {
-    return true;
+    return Promise.resolve(true);
   }
 
-  execute(thing) {}
+  execute(thing) {
+    return Promise.resolve();
+  }
 
-  postProcess(thing) {}
+  postProcess(thing) {
+    return Promise.resolve();
+  }
 
   setHook(hook) {
     // append a hook to the hook chain.
@@ -119,47 +114,41 @@ class Anchor extends Hook {
     this.setFlags(true);
 
     // preProcess() controls whether this hook executes
-    return new Promise((resolve,reject) => resolve(this.preProcess(thing)).catch(reject))
-    .then((preProcessResult) => {
-      if (preProcessResult) {
-        if (this.flags.execute) {
-          return new Promise((resolve, reject) => {
-            return resolve(this.execute(thing)).catch(reject);
+    return Promise.resolve(this.preProcess(thing))
+      .then((preProcessResult) => {
+        if (preProcessResult) {
+          if (this.flags.execute) {
+            return Promise.resolve(this.execute(thing));
+          }
+        }
+        return Promise.resolve(true);
+      })
+      .then(() => {
+        // down the hook chain
+        if (this.flags.hook && this.isHook(this.hook)) {
+          return Promise.resolve( this.hook.process(thing));
+        }
+      })
+      .then(() => {
+        // process the hook array
+        if(this.flags.hook && this.hooks.length > 0){
+          this.hooks.forEach( (hook) => {
+            if (this.isHook(hook)) {
+              hook.process(thing);
+            }
           });
         }
-      }
-      return new Promise((resolve, reject) => {return resolve();});
-    })
-    .then(() => {
-      // down the hook chain
-      if (this.flags.hook && this.isHook(this.hook)) {
-        return new Promise((resolve, reject) => {
-          return this.hook.process(thing).then(resolve).catch(reject);
-        });
-      } else {
         return new Promise((resolve, reject) => {return resolve();});
-      }
-    })
-    .then(() => {
-      // process the hook array
-      if(this.flags.hook && this.hooks.length > 0){
-        this.hooks.forEach( (hook) => {
-          if (this.isHook(hook)) {
-            hook.process(thing);
-          }
-        });
-      }
-      return new Promise((resolve, reject) => {return resolve();});
-    })
-    .then(() => {
-      // fire the post process as appropriate
-      if (this.flags.postProcess) {
-        return new Promise((resolve, reject) => {
-          return this.postProcess(thing);
-        });
-      }
-      return new Promise((resolve, reject) => {return resolve();});
-    });
+      })
+      .then(() => {
+        // fire the post process as appropriate
+        if (this.flags.postProcess) {
+          return new Promise((resolve, reject) => {
+            return this.postProcess(thing);
+          });
+        }
+        Promise.resolve();
+      });
   }
 }
 

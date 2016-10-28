@@ -52,10 +52,13 @@ describe('Anchor array functionality', function(){
     anchor.setHook(hookD);
     anchor.setHook(hookE);
 
-    let p = new Promise((resolve, reject) => resolve(anchor.process(obj)));
+    let p = anchor.process(obj);
     p.then(() => {
       obj.should.have.property('preTally', 5);
       obj.should.have.property('postTally', 5);
+    })
+    .catch((err) =>{
+      console.dir(err);
     });
   });
 
