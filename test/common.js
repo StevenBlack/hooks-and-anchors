@@ -33,6 +33,7 @@ class DelayableHook extends hookModule.Hook {
   }
 
   execute(thing) {
+    console.log(`executing Hook depth ${this.depth}`);
     this.delay(this.settings.execute || 200, "execute");
   }
 
@@ -43,11 +44,11 @@ class DelayableHook extends hookModule.Hook {
 
   delay(ms, str){
     var ctr, rej, p = new Promise((resolve, reject) => {
-        console.log( `setting Hook ${this.depth} delayed ${str} by ${ms}ms`);
+        // console.log( `setting Hook depth ${this.depth} delayed ${str} by ${ms}ms ` + new Date());
         ctr = setTimeout(() => {
           console.log( `delayed ${str} by ${ms}ms`)
           thing[this.name].push(`Hook ${this.depth} ${str}`)
-          resolve();
+          done();
           }, ms);
         rej = reject;
     });

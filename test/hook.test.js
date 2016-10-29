@@ -87,10 +87,10 @@ describe('Hook execution sequence', function(){
     hook1.setHook(hook2);
     let thing = {};
     let p = hook1.process(thing);
-    console.dir(p);
-    p.then(() => {console.dir(thing);})
+
+    p.then(() => {console.log('Done!');console.dir(thing);console.log(new Date());})
     .catch((err) =>{
       console.dir(err);
-    });;
+    });
   });
 });
