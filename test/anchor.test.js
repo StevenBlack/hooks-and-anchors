@@ -3,7 +3,7 @@
 const assert = require('chai').assert;
 const expect = require('chai').expect;
 const should = require('should');
-const Anchor = require('../src/').Anchor;
+const Anchor = require('../lib/').Anchor;
 const TallyHook = require('./common.js').TallyHook;
 
 describe('Anchor standalone functionality', function(){
@@ -35,8 +35,9 @@ describe('Anchor standalone functionality', function(){
 
 describe('Anchor array functionality', function(){
   it('array hook methods all fire', function(){
-    let obj = {
+    let testObj = {
       preTally: 0,
+      exeTally: 0,
       postTally: 0
     };
     const anchor = new Anchor();
@@ -52,10 +53,12 @@ describe('Anchor array functionality', function(){
     anchor.setHook(hookD);
     anchor.setHook(hookE);
 
-    let p = anchor.process(obj);
-    p.then(() => {
-      obj.should.have.property('preTally', 5);
-      obj.should.have.property('postTally', 5);
+    let promise = anchor.process(testObj);
+    promise.should.be.a.Promise();
+    promise.then((testObj) => {
+      should(testObj).have.property('preTally', 5);
+      should(testObj).have.property('exeTally', 5);
+      should(testObj).have.property('postTally', 5);
     })
     .catch((err) =>{
       console.dir(err);

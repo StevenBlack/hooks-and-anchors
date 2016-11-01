@@ -1,19 +1,31 @@
 'use strict';
 
-const hookModule = require("../src/");
-class TallyHook extends hookModule.Hook {
+const Hook = require("../lib/").Hook;
 
-  preProcess(thing) {
-    thing.preTally = thing.preTally + 1;
-    return true;
+class TallyHook extends Hook {
+
+  preProcess(thing, resolve, reject)  {
+    setTimeout(this.randomTimeProcess.bind(this, thing, resolve, 'pre') , Math.random()*1000)
   }
 
-  postProcess(thing) {
-    thing.postTally = thing.postTally + 1;
+  execute(thing, resolve, reject)  {
+    setTimeout(this.randomTimeProcess.bind(this, thing, resolve, 'exe') , Math.random()*1000)
+  }
+
+  postProcess(thing, resolve, reject) {
+    setTimeout(this.randomTimeProcess.bind(this, thing, resolve, 'post') , Math.random()*1000)
+  }
+
+  randomTimeProcess(thing, resolve, stage) {
+    thing[stage + 'Tally'] = thing[stage + 'Tally'] || 0;
+    thing[stage + 'Tally'] = thing[stage + 'Tally'] + 1;
+    console.log(`${this.name} ${stage} ${thing[stage + 'Tally']}`);
+    resolve(thing);
+    return thing;
   }
 }
 
-class DelayableHook extends hookModule.Hook {
+class DelayableHook extends Hook {
   constructor(options) {
     super(options);
     this.depth = 0;

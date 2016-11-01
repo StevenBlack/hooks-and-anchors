@@ -1,9 +1,8 @@
 'use strict';
 
 class Hook {
-  constructor(options) {
+  constructor(options = {}) {
     // native properties of all hooks
-    options = options || {};
     this.name = options.name || 'Hook';
     this.settings = {};
     this.hook = undefined;
@@ -14,15 +13,13 @@ class Hook {
     };
 
     // reckon the settings
-    this.defaults = {
-      'name': 'Hook'
-    }
+    this.defaults = {'name': 'Hook'};
     Object.assign(this.settings, this.defaults, options);
     this.selfConfig();
   }
 
   selfConfig() {
-    if(this.settings.name) {
+    if (this.settings.name) {
       this.name = this.settings.name;
     }
   }
@@ -31,40 +28,77 @@ class Hook {
     // set all flags to signal go!
     this.setFlags(true);
 
-    // preProcess() controls whether this hook executes
-    return Promise.resolve(this.preProcess(thing))
-      .then((preProcessResult) => {
-        if (preProcessResult) {
-          if (this.flags.execute) {
-            return Promise.resolve(this.execute(thing));
-          }
-        }
-        return Promise.resolve(true);
-      })
-      .then(() => {
-        // down the hook chain
-        if (this.flags.hook && this.isHook(this.hook)) {
-          return Promise.resolve( this.hook.process(thing));
-        }
-      })
-      .then(() => {
-        // fire the post process as appropriate
-        if (this.flags.postProcess) {
-            return Promise.resolve(this.postProcess(thing));
-        }
+    const implementation = (thing) => {
+      const proc = [];
+      const postProc = [];
+      this.loadP(proc, postProc);
+
+      let p = proc.shift()(thing);
+
+      proc.forEach((func) => {
+          p = p.then(() => {return func(thing);});
       });
+      postProc.forEach((func) => {
+          p = p.then(() => {return func(thing);});
+      });
+      return p;
+    };
+
+    let promise;
+    try {
+      promise = implementation(thing);
+    }
+    catch (e) {console.log(e);}
+
+    return promise;
   }
 
-  preProcess(thing) {
-    return Promise.resolve(true);
+  _preProcess(thing) {
+    return new Promise( (resolve, reject) => {
+      try {
+        this.preProcess(thing, resolve, reject);
+      }
+      catch (e) {console.log(e); reject(e);}
+    });
   }
 
-  execute(thing) {
-    return Promise.resolve();
+  _execute(thing) {
+    if (this.flags.execute) {
+      return new Promise( (resolve, reject) => {
+        try {
+          this.execute(thing, resolve, reject);
+        }
+        catch (e) {reject(e);}
+      });
+    } else {
+      return Promise.resolve(thing);
+    }
   }
 
-  postProcess(thing) {
-    return Promise.resolve();
+  _postProcess(thing) {
+    if (this.flags.postProcess) {
+      return new Promise( (resolve, reject) => {
+        try {
+          this.postProcess(thing, resolve, reject);
+        }
+        catch (e) {reject(e);}
+      });
+    } else {
+      return Promise.resolve(thing);
+    }
+  }
+
+  // just template methods here.
+  preProcess(thing, resolve, reject) {
+    resolve(thing);
+  }
+
+  execute(thing, resolve, reject) {
+    resolve(thing);
+  }
+
+  postProcess(thing, resolve, reject) {
+    resolve(thing);
   }
 
   setHook(hook) {
@@ -73,7 +107,7 @@ class Hook {
       this.hook.setHook(hook);
     } else {
       // hook could be a package name
-      if(typeof hook === 'string' ) {
+      if (typeof hook === 'string' ) {
         return this.setHook(this.classInstanceFromString(hook));
       }
       // only allow hooks as hooks
@@ -99,56 +133,39 @@ class Hook {
     const Temp = require(packageLocation);
     return new Temp(...a);
   }
+
+  loadP(proc = [], postProc = []) {
+    proc.push(this._preProcess.bind(this));
+    proc.push(this._execute.bind(this));
+    postProc.unshift(this._postProcess.bind(this));
+
+    // go down the hook chain.
+    if (this.isHook(this.hook)) {
+      this.hook.loadP(proc, postProc);
+    }
+    return;
+  }
 }
 
 class Anchor extends Hook {
-  constructor(options) {
-    options = options || {};
+  constructor(options = {}) {
     options.name = options.name || 'Anchor';
     super(options);
+    // anchors have this additional hooks array and flag
     this.hooks = [];
+    this.flags.hooks = true;
   }
 
-  process(thing) {
-    // set all flags to signal go!
-    this.setFlags(true);
+  loadP(proc = [], postProc = []) {
+    super.loadP(proc, postProc);
 
-    // preProcess() controls whether this hook executes
-    return Promise.resolve(this.preProcess(thing))
-      .then((preProcessResult) => {
-        if (preProcessResult) {
-          if (this.flags.execute) {
-            return Promise.resolve(this.execute(thing));
-          }
-        }
-        return Promise.resolve(true);
-      })
-      .then(() => {
-        // down the hook chain
-        if (this.flags.hook && this.isHook(this.hook)) {
-          return Promise.resolve( this.hook.process(thing));
-        }
-      })
-      .then(() => {
-        // process the hook array
-        if(this.flags.hook && this.hooks.length > 0){
-          this.hooks.forEach( (hook) => {
-            if (this.isHook(hook)) {
-              hook.process(thing);
-            }
-          });
-        }
-        return new Promise((resolve, reject) => {return resolve();});
-      })
-      .then(() => {
-        // fire the post process as appropriate
-        if (this.flags.postProcess) {
-          return new Promise((resolve, reject) => {
-            return this.postProcess(thing);
-          });
-        }
-        Promise.resolve();
-      });
+    // iterate the hooks collection
+    this.hooks.forEach((hook) => {
+      if (this.isHook(hook)) {
+        hook.loadP(proc, postProc);
+      }
+    });
+    return;
   }
 }
 

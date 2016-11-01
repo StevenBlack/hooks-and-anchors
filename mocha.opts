@@ -1,2 +1,2 @@
---recursive test/
+--recursive libtest/
 --compilers js:babel-core/register
