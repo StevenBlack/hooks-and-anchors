@@ -34,7 +34,7 @@ describe('Anchor standalone functionality', function () {
 
     anchor.setHook(hook).setHook(hook2);
     anchor.hooks.push(hook3);
-    console.dir(anchor.hooks);
+
     // set all flags false
     anchor.setFlags(false);
 
