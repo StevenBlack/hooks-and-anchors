@@ -26,7 +26,8 @@
     "release:minor": "npm version minor && npm publish",
     "release:major": "npm version major && npm publish",
     "compile": "rm -rf lib/ && babel -d lib/ src/ && rm -rf libtest/ && babel -d libtest/ test/",
-    "mocha": "npm run compile && mocha --opts mocha.opts"
+    "mocha": "npm run compile && mocha --opts mocha.opts",
+    "test": "npm run compile && mocha --opts mocha.opts"
   },
   "semistandard": {
     "env": [
