@@ -4,6 +4,7 @@ const assert = require('chai').assert;
 const expect = require('chai').expect;
 const should = require('should');
 const Anchor = require('../lib/').Anchor;
+const Hook   = require('../lib/').Hook;
 const TallyHook = require('./common.js').TallyHook;
 
 describe('Anchor standalone functionality', function(){
@@ -24,6 +25,41 @@ describe('Anchor standalone functionality', function(){
     flags.should.have.property('hook', true);
     flags.should.have.property('postProcess', true);
   });
+
+  it('Anchor.setFlags() cascades', () => {
+    const anchor = new Anchor();
+    const hook = new Hook();
+    const hook2 = new Hook();
+    const hook3 = new Hook();
+
+    anchor.setHook(hook).setHook(hook2);
+    anchor.hooks.push(hook3);
+
+    // set all flags false
+    anchor.setFlags(false);
+
+    let flags = anchor.flags;
+    flags.should.have.property('execute', false);
+    flags.should.have.property('hook', false);
+    flags.should.have.property('postProcess', false);
+
+
+    flags = hook.flags;
+    flags.should.have.property('execute', false);
+    flags.should.have.property('hook', false);
+    flags.should.have.property('postProcess', false);
+
+    flags = hook2.flags;
+    flags.should.have.property('execute', false);
+    flags.should.have.property('hook', false);
+    flags.should.have.property('postProcess', false);
+
+    flags = anchor.hooks[0].flags;
+    flags.should.have.property('execute', false);
+    flags.should.have.property('hook', false);
+    flags.should.have.property('postProcess', false);
+  });
+
 
   it('anchor hook added by setHook method', function(){
     const anchor = new Anchor();

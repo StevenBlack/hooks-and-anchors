@@ -26,6 +26,24 @@ describe('Hook standalone functionality', () => {
     flags.should.have.property('postProcess', true);
   });
 
+  it('Hook.setFlags() cascades', () => {
+    const hook = new Hook();
+    const hook2 = new Hook();
+    hook.setHook(hook2);
+    // set all flags false
+    hook.setFlags(false);
+
+    let flags = hook.flags;
+    flags.should.have.property('execute', false);
+    flags.should.have.property('hook', false);
+    flags.should.have.property('postProcess', false);
+
+    flags = hook2.flags;
+    flags.should.have.property('execute', false);
+    flags.should.have.property('hook', false);
+    flags.should.have.property('postProcess', false);
+  });
+
   it('Hook added by setHook method', () => {
     const hook = new Hook();
     const hook2 = new Hook();

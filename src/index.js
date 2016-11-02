@@ -122,6 +122,10 @@ class Hook {
     for (const key in this.flags) {
       this.flags[key] = flag;
     }
+    // setFlags down the hook chain
+    if (this.isHook(this.hook)) {
+      this.hook.setFlags(flag);
+    }
   }
 
   isHook(hook) {
@@ -166,6 +170,17 @@ class Anchor extends Hook {
       }
     });
     return;
+  }
+
+  setFlags(flag = true) {
+    super.setFlags(flag);
+
+    this.hooks.forEach((hook) => {
+      // setFlags through the collection
+      if (this.isHook(hook)) {
+        hook.setFlags(flag);
+      }
+    });
   }
 }
 
