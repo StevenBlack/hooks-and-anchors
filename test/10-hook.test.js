@@ -100,6 +100,16 @@ describe('Passing a class name to setHook()', () => {
   });
 });
 
+describe('Passing a class name to and options to setHook()', () => {
+  it('creates instance named foo, as expected', () => {
+    const myString = "../test/myhookclass";
+    const hook = new Hook();
+    let obj= hook.setHook(myString, {name:'foo'})
+    expect(hook.isHook(obj)).to.equal(true);
+    obj.should.have.property('name', 'foo');
+  });
+});
+
 describe('Hook execution sequence', () => {
   it('is as expected', () => {
     const hook1 = new DelayableHook();

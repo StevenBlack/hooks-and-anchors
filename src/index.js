@@ -101,14 +101,14 @@ class Hook {
     resolve(thing);
   }
 
-  setHook(hook) {
+  setHook(hook, ...a) {
     // append a hook to the hook chain.
     if (this.isHook(this.hook)) {
-      this.hook.setHook(hook);
+      this.hook.setHook(hook, ...a);
     } else {
       // hook could be a package name
       if (typeof hook === 'string' ) {
-        return this.setHook(this.classInstanceFromString(hook));
+        return this.setHook(this.classInstanceFromString(hook, ...a));
       }
       // only allow hooks as hooks
       if (this.isHook(hook)) {
