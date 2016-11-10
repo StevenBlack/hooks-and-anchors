@@ -52,13 +52,8 @@ class Hook {
       return p;
     };
 
-    let promise;
-    try {
-      promise = implementation(thing);
-    }
-    catch (e) {console.log(e);}
-
-    return promise;
+    return implementation(thing)
+    .catch( (e) => {console.log(e);});
   }
 
   _preProcess(thing) {
