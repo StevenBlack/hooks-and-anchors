@@ -47,7 +47,6 @@ var TallyHook = function (_Hook) {
       thing[stage + 'Tally'] = thing[stage + 'Tally'] + 1;
       debug(this.name + ' ' + stage + ' ' + thing[stage + 'Tally']);
       resolve(thing);
-      return thing;
     }
   }]);
 

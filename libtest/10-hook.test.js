@@ -51,11 +51,6 @@ describe('Tests in ' + __filename, function () {
       hook.setHook(hook2);
       expect(hook.isHook(hook.hook)).to.equal(true);
     });
-
-    it('Simple hook all methods fire', function () {
-      var hook = new Hook();
-      hook.process({});
-    });
   });
 
   describe('Hook functionality test', function () {
