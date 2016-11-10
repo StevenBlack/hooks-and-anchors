@@ -88,9 +88,7 @@ describe('Tests in ' + __filename, function () {
       anchor.setHook(hookD);
       anchor.setHook(hookE);
 
-      var promise = anchor.process(testObj);
-      promise.should.be.a.Promise();
-      promise.then(function (testObj) {
+      return anchor.process(testObj).then(function (testObj) {
         should(testObj).have.property('preTally', 5);
         should(testObj).have.property('exeTally', 5);
         should(testObj).have.property('postTally', 5);

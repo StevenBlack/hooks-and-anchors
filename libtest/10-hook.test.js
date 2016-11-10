@@ -57,24 +57,18 @@ describe('Tests in ' + __filename, function () {
     it('Hook methods all fire', function () {
       var obj = {
         preTally: 0,
+        exeTally: 0,
         postTally: 0
       };
       var hook = new TallyHook({ name: 'tallyHook' });
       var hookA = new TallyHook({ name: 'tallyHookA' });
       var hookB = new TallyHook({ name: 'tallyHookB' });
       hook.setHook(hookA).setHook(hookB);
-      var promise = hook.process(obj);
-      promise.should.be.a.Promise();
-
-      promise.then(function (obj) {
+      return hook.process(obj).then(function (obj) {
         obj.should.have.property('preTally', 3);
-      });
-
-      promise.then(function (obj) {
+        obj.should.have.property('exeTally', 3);
         obj.should.have.property('postTally', 3);
-      });
-
-      promise.catch(function (reason) {
+      }).catch(function (reason) {
         console.dir(reason);
       });
     });
@@ -120,9 +114,7 @@ describe('Tests in ' + __filename, function () {
       hook1.setHook(hook2);
       var thing = {};
 
-      var p = hook1.process(thing);
-
-      p.then(function () {
+      return hook1.process(thing).then(function () {
         console.log('Done!');console.dir(thing);console.log(new Date());
       }).catch(function (err) {
         console.dir(err);

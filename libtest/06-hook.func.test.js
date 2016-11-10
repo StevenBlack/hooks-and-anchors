@@ -4,8 +4,7 @@ var assert = require('chai').assert;
 var expect = require('chai').expect;
 var should = require('should');
 var Hook = require('../lib/').Hook;
-var TallyHook = require('../libtest/common.js').TallyHook;
-var DelayableHook = require('../libtest/common.js').DelayableHook;
+var TallyHook = require('../test/common.js').TallyHook;
 
 describe('Tests in ' + __filename, function () {
 
