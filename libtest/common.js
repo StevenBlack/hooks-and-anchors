@@ -26,21 +26,18 @@ var TallyHook = function (_Hook) {
     key: 'preProcess',
     value: function preProcess(thing, resolve, reject) {
       debug('Hook ' + this.name + ' - preProcess()');
-      console.log('Hook ' + this.name + ' - preProcess()');
       setTimeout(this.randomTimeProcess.bind(this, thing, resolve, 'pre'), Math.random() * 1000);
     }
   }, {
     key: 'execute',
     value: function execute(thing, resolve, reject) {
       debug('Hook ' + this.name + ' - execute()');
-      console.log('Hook ' + this.name + ' - execute()');
       setTimeout(this.randomTimeProcess.bind(this, thing, resolve, 'exe'), Math.random() * 1000);
     }
   }, {
     key: 'postProcess',
     value: function postProcess(thing, resolve, reject) {
       debug('Hook ' + this.name + ' - postProcess()');
-      console.log('Hook ' + this.name + ' - postProcess()');
       setTimeout(this.randomTimeProcess.bind(this, thing, resolve, 'post'), Math.random() * 1000);
     }
   }, {
@@ -89,7 +86,6 @@ var DelayableHook = function (_Hook2) {
     key: 'execute',
     value: function execute(thing) {
       debug('Hook ' + this.name + ' - execute()');
-      console.log('executing Hook depth ' + this.depth);
       this.delay(this.settings.execute || 200, "execute");
     }
   }, {
@@ -106,9 +102,7 @@ var DelayableHook = function (_Hook2) {
       var ctr,
           rej,
           p = new Promise(function (resolve, reject) {
-        // console.log( `setting Hook depth ${this.depth} delayed ${str} by ${ms}ms ` + new Date());
         ctr = setTimeout(function () {
-          console.log('delayed ' + str + ' by ' + ms + 'ms');
           thing[_this3.name].push('Hook ' + _this3.depth + ' ' + str);
           done();
         }, ms);
