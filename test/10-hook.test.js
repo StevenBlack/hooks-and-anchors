@@ -57,7 +57,7 @@ describe(`Tests in ${__filename}`, () => {
     it('Hook methods all fire', () => {
       let obj = {
         preTally: 0,
-        exeTally: 0;
+        exeTally: 0,
         postTally: 0
       };
       const hook = new TallyHook({name:'tallyHook'});
