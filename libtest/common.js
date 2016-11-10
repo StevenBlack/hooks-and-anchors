@@ -10,6 +10,7 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+var debug = require('debug')('HNA');
 var Hook = require("../lib/").Hook;
 
 var TallyHook = function (_Hook) {
@@ -24,16 +25,22 @@ var TallyHook = function (_Hook) {
   _createClass(TallyHook, [{
     key: 'preProcess',
     value: function preProcess(thing, resolve, reject) {
+      debug('Hook ' + this.name + ' - preProcess()');
+      console.log('Hook ' + this.name + ' - preProcess()');
       setTimeout(this.randomTimeProcess.bind(this, thing, resolve, 'pre'), Math.random() * 1000);
     }
   }, {
     key: 'execute',
     value: function execute(thing, resolve, reject) {
+      debug('Hook ' + this.name + ' - execute()');
+      console.log('Hook ' + this.name + ' - execute()');
       setTimeout(this.randomTimeProcess.bind(this, thing, resolve, 'exe'), Math.random() * 1000);
     }
   }, {
     key: 'postProcess',
     value: function postProcess(thing, resolve, reject) {
+      debug('Hook ' + this.name + ' - postProcess()');
+      console.log('Hook ' + this.name + ' - postProcess()');
       setTimeout(this.randomTimeProcess.bind(this, thing, resolve, 'post'), Math.random() * 1000);
     }
   }, {
@@ -41,7 +48,7 @@ var TallyHook = function (_Hook) {
     value: function randomTimeProcess(thing, resolve, stage) {
       thing[stage + 'Tally'] = thing[stage + 'Tally'] || 0;
       thing[stage + 'Tally'] = thing[stage + 'Tally'] + 1;
-      console.log(this.name + ' ' + stage + ' ' + thing[stage + 'Tally']);
+      debug(this.name + ' ' + stage + ' ' + thing[stage + 'Tally']);
       resolve(thing);
       return thing;
     }
@@ -73,6 +80,7 @@ var DelayableHook = function (_Hook2) {
   }, {
     key: 'preProcess',
     value: function preProcess(thing) {
+      debug('Hook ' + this.name + ' - preProcess()');
       thing[this.name] = thing[this.name] || [];
       this.delay(this.settings.preprocess || 500, "preProcess");
       return true;
@@ -80,12 +88,14 @@ var DelayableHook = function (_Hook2) {
   }, {
     key: 'execute',
     value: function execute(thing) {
+      debug('Hook ' + this.name + ' - execute()');
       console.log('executing Hook depth ' + this.depth);
       this.delay(this.settings.execute || 200, "execute");
     }
   }, {
     key: 'postProcess',
     value: function postProcess(thing) {
+      debug('Hook ' + this.name + ' - postProcess()');
       this.delay(this.settings.postprocess || 100, "postProcess");
     }
   }, {
