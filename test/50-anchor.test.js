@@ -90,16 +90,15 @@ describe(`Tests in ${__filename}`, () => {
       anchor.setHook(hookD);
       anchor.setHook(hookE);
 
-      let promise = anchor.process(testObj);
-      promise.should.be.a.Promise();
-      promise.then((testObj) => {
-        should(testObj).have.property('preTally', 5);
-        should(testObj).have.property('exeTally', 5);
-        should(testObj).have.property('postTally', 5);
-      })
-      .catch((err) =>{
-        console.dir(err);
-      });
+      return anchor.process(testObj)
+          .then((testObj) => {
+            should(testObj).have.property('preTally', 5);
+            should(testObj).have.property('exeTally', 5);
+            should(testObj).have.property('postTally', 5);
+          })
+          .catch((err) => {
+            console.dir(err);
+          });
     });
   });
 });

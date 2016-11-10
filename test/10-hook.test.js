@@ -57,24 +57,20 @@ describe(`Tests in ${__filename}`, () => {
     it('Hook methods all fire', () => {
       let obj = {
         preTally: 0,
+        exeTally: 0;
         postTally: 0
       };
       const hook = new TallyHook({name:'tallyHook'});
       const hookA = new TallyHook({name:'tallyHookA'});
       const hookB = new TallyHook({name:'tallyHookB'});
       hook.setHook(hookA).setHook(hookB);
-      const promise = hook.process(obj);
-      promise.should.be.a.Promise();
-
-      promise.then((obj) => {
-        obj.should.have.property('preTally', 3)
-      });
-
-      promise.then((obj) => {
-        obj.should.have.property('postTally', 3)
-      });
-
-      promise.catch((reason) => {console.dir(reason);} )
+      return hook.process(obj)
+        .then((obj) => {
+          obj.should.have.property('preTally', 3);
+          obj.should.have.property('exeTally', 3);
+          obj.should.have.property('postTally', 3);
+        })
+        .catch((reason) => {console.dir(reason);});
     });
   });
 
@@ -118,12 +114,11 @@ describe(`Tests in ${__filename}`, () => {
       hook1.setHook(hook2);
       let thing = {};
 
-      let p = hook1.process(thing);
-
-      p.then(() => {console.log('Done!');console.dir(thing);console.log(new Date());})
-      .catch((err) =>{
-        console.dir(err);
-      });
+      return hook1.process(thing)
+        .then(() => {console.log('Done!');console.dir(thing);console.log(new Date());})
+        .catch((err) =>{
+          console.dir(err);
+        });
     });
   });
 });
