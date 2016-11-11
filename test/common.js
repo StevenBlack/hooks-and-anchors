@@ -7,17 +7,17 @@ class TallyHook extends Hook {
 
   preProcess(thing, resolve, reject)  {
     debug(`Hook ${this.name} - PreProcess()`);
-    setTimeout(this.randomTimeProcess.bind(this, thing, resolve, 'pre'), Math.random()*1000);
+    setTimeout(this.randomTimeProcess.bind(this, thing, resolve, 'pre'), Math.random()*100);
   }
 
   execute(thing, resolve, reject)  {
     debug(`Hook ${this.name} - execute()`);
-    setTimeout(this.randomTimeProcess.bind(this, thing, resolve, 'exe'), Math.random()*1000);
+    setTimeout(this.randomTimeProcess.bind(this, thing, resolve, 'exe'), Math.random()*100);
   }
 
   postProcess(thing, resolve, reject) {
     debug(`Hook ${this.name} - postProcess()`);
-    setTimeout(this.randomTimeProcess.bind(this, thing, resolve, 'post'), Math.random()*1000);
+    setTimeout(this.randomTimeProcess.bind(this, thing, resolve, 'post'), Math.random()*100);
   }
 
   randomTimeProcess(thing, resolve, stage) {
