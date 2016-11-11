@@ -106,19 +106,4 @@ describe(`Tests in ${__filename}`, () => {
       obj.should.have.property('name', 'foo');
     });
   });
-
-  describe('Hook execution sequence', () => {
-    it('is as expected', () => {
-      const hook1 = new DelayableHook();
-      const hook2 = new DelayableHook();
-      hook1.setHook(hook2);
-      let thing = {};
-
-      return hook1.process(thing)
-        .then(() => {console.log('Done!');console.dir(thing);console.log(new Date());})
-        .catch((err) =>{
-          console.dir(err);
-        });
-    });
-  });
 });
