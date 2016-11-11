@@ -1,7 +1,5 @@
 'use strict';
 
-var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
-
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -53,72 +51,6 @@ var TallyHook = function (_Hook) {
   return TallyHook;
 }(Hook);
 
-var DelayableHook = function (_Hook2) {
-  _inherits(DelayableHook, _Hook2);
-
-  function DelayableHook(options) {
-    _classCallCheck(this, DelayableHook);
-
-    var _this2 = _possibleConstructorReturn(this, (DelayableHook.__proto__ || Object.getPrototypeOf(DelayableHook)).call(this, options));
-
-    _this2.depth = 0;
-    return _this2;
-  }
-
-  _createClass(DelayableHook, [{
-    key: 'setHook',
-    value: function setHook(hook) {
-      if (this.isHook(hook)) {
-        hook.depth = hook.depth + 1;
-      }
-      _get(DelayableHook.prototype.__proto__ || Object.getPrototypeOf(DelayableHook.prototype), 'setHook', this).call(this, hook);
-    }
-  }, {
-    key: 'preProcess',
-    value: function preProcess(thing) {
-      debug('Hook ' + this.name + ' - preProcess()');
-      thing[this.name] = thing[this.name] || [];
-      this.delay(this.settings.preprocess || 500, "preProcess");
-      return true;
-    }
-  }, {
-    key: 'execute',
-    value: function execute(thing) {
-      debug('Hook ' + this.name + ' - execute()');
-      this.delay(this.settings.execute || 200, "execute");
-    }
-  }, {
-    key: 'postProcess',
-    value: function postProcess(thing) {
-      debug('Hook ' + this.name + ' - postProcess()');
-      this.delay(this.settings.postprocess || 100, "postProcess");
-    }
-  }, {
-    key: 'delay',
-    value: function delay(ms, str) {
-      var _this3 = this;
-
-      var ctr,
-          rej,
-          p = new Promise(function (resolve, reject) {
-        ctr = setTimeout(function () {
-          thing[_this3.name].push('Hook ' + _this3.depth + ' ' + str);
-          done();
-        }, ms);
-        rej = reject;
-      });
-
-      p.cancel = function () {
-        clearTimeout(ctr);rej(Error("Cancelled"));
-      };
-      return p;
-    }
-  }]);
-
-  return DelayableHook;
-}(Hook);
-
 module.exports = {
-  TallyHook: TallyHook,
-  DelayableHook: DelayableHook
+  TallyHook: TallyHook
 };
