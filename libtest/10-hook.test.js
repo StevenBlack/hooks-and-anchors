@@ -106,19 +106,4 @@ describe('Tests in ' + __filename, function () {
       obj.should.have.property('name', 'foo');
     });
   });
-
-  describe('Hook execution sequence', function () {
-    it('is as expected', function () {
-      var hook1 = new DelayableHook();
-      var hook2 = new DelayableHook();
-      hook1.setHook(hook2);
-      var thing = {};
-
-      return hook1.process(thing).then(function () {
-        console.log('Done!');console.dir(thing);console.log(new Date());
-      }).catch(function (err) {
-        console.dir(err);
-      });
-    });
-  });
 });

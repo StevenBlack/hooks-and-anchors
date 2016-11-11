@@ -25,25 +25,20 @@ var TallyHook = function (_Hook) {
   _createClass(TallyHook, [{
     key: 'preProcess',
     value: function preProcess(thing, resolve, reject) {
-      setTimeout(this.promiseTimeout, 2000, thing, this.name, resolve, reject);
-    }
-  }, {
-    key: 'promiseTimeout',
-    value: function promiseTimeout(thing, name, resolve, reject) {
-      debug('Hook ' + name + ' - preProcess() xxxxx');
-      resolve(thing);
+      debug('Hook ' + this.name + ' - PreProcess()');
+      setTimeout(this.randomTimeProcess.bind(this, thing, resolve, 'pre'), Math.random() * 100);
     }
   }, {
     key: 'execute',
     value: function execute(thing, resolve, reject) {
       debug('Hook ' + this.name + ' - execute()');
-      setTimeout(this.randomTimeProcess.bind(this, thing, resolve, 'exe'), Math.random() * 1000);
+      setTimeout(this.randomTimeProcess.bind(this, thing, resolve, 'exe'), Math.random() * 100);
     }
   }, {
     key: 'postProcess',
     value: function postProcess(thing, resolve, reject) {
       debug('Hook ' + this.name + ' - postProcess()');
-      setTimeout(this.randomTimeProcess.bind(this, thing, resolve, 'post'), Math.random() * 1000);
+      setTimeout(this.randomTimeProcess.bind(this, thing, resolve, 'post'), Math.random() * 100);
     }
   }, {
     key: 'randomTimeProcess',
