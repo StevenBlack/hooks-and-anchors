@@ -7,7 +7,6 @@ const Hook = require('../lib/').Hook;
 const TallyHook = require('../test/common.js').TallyHook;
 
 describe(`Tests in ${__filename}`, () => {
-
   describe('Hook functionality test', () => {
     it('Hook methods all fire', () => {
       let obj = {
