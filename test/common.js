@@ -6,22 +6,18 @@ const Hook = require("../src/").Hook;
 class TallyHook extends Hook {
 
   preProcess(thing, resolve, reject)  {
-    setTimeout( this.promiseTimeout, 2000, thing, this.name, resolve, reject);
-  }
-
-  promiseTimeout(thing, name, resolve, reject) {
-    debug(`Hook ${name} - preProcess() xxxxx`);
-    resolve(thing);
+    debug(`Hook ${this.name} - PreProcess()`);
+    setTimeout(this.randomTimeProcess.bind(this, thing, resolve, 'pre'), Math.random()*1000);
   }
 
   execute(thing, resolve, reject)  {
     debug(`Hook ${this.name} - execute()`);
-    setTimeout(this.randomTimeProcess.bind(this, thing, resolve, 'exe'), Math.random()*1000)
+    setTimeout(this.randomTimeProcess.bind(this, thing, resolve, 'exe'), Math.random()*1000);
   }
 
   postProcess(thing, resolve, reject) {
     debug(`Hook ${this.name} - postProcess()`);
-    setTimeout(this.randomTimeProcess.bind(this, thing, resolve, 'post'), Math.random()*1000)
+    setTimeout(this.randomTimeProcess.bind(this, thing, resolve, 'post'), Math.random()*1000);
   }
 
   randomTimeProcess(thing, resolve, stage) {

@@ -4,7 +4,6 @@ const debug = require('debug')('HNA');
 
 class Hook {
   constructor(options = {}) {
-
     // native properties of all hooks
     this.name = options.name || 'Hook';
     this.settings = {};
@@ -33,71 +32,67 @@ class Hook {
     // set all flags to signal go!
     this.setFlags(true);
 
-    // this function embodies the process implementation
-    // as a chain of function calls
     const implementation = (thing) => {
       const proc = [];
       const postProc = [];
       this.loadP(proc, postProc);
 
-      // Wrap our thing in a promise
-      let p = Promise.resolve(thing);
+      let p = proc.shift()(thing);
 
-      proc.forEach((f) => {
-          p.then(f(thing));
+      proc.forEach((func) => {
+          p = p.then(() => {return func(thing);});
       });
-      postProc.forEach((f) => {
-          p.then(f(thing));
+      postProc.forEach((func) => {
+          p = p.then(() => {return func(thing);});
       });
       return p;
     };
 
-    return implementation(thing)
-    .catch( (e) => {console.log(e);});
+    let promise;
+    try {
+      promise = implementation(thing);
+    }
+    catch (e) {console.log(e);}
+
+    return promise;
   }
 
   _preProcess(thing) {
     debug(`Hook ${this.name} - _preProcess()`);
-    return new Promise((resolve, reject) => {
-      this.preProcess(thing, resolve, reject);
-    })
-    .catch((e) => {console.log(e); reject(e);});
+    return new Promise( (resolve, reject) => {
+      try {
+        this.preProcess(thing, resolve, reject);
+      }
+      catch (e) {console.log(e); reject(e);}
+    });
   }
 
   _execute(thing) {
-    return (thing) => {
-      debug(`Hook ${this.name} - _execute()`);
-      if (this.flags.execute) {
-        return new Promise((resolve, reject) => {
-          try {
-            this.execute(thing, resolve, reject);
-          }
-          catch (e) {
-            reject(e);
-          }
-        });
-      } else {
-        return Promise.resolve(thing);
-      }
+    debug(`Hook ${this.name} - _execute()`);
+    if (this.flags.execute) {
+      return new Promise( (resolve, reject) => {
+        try {
+          this.execute(thing, resolve, reject);
+        }
+        catch (e) {reject(e);}
+      });
+    } else {
+      return Promise.resolve(thing);
     }
   }
 
   _postProcess(thing) {
-    return (thing) => {
-      debug(`Hook ${this.name} - _postProcess()`);
-      if (this.flags.postProcess) {
-        return new Promise((resolve, reject) => {
-          try {
-            this.postProcess(thing, resolve, reject);
-          }
-          catch (e) {
-            reject(e);
-          }
-        });
-      } else {
-        return Promise.resolve(thing);
-      }
-    };
+    debug(`Hook ${this.name} - _postProcess()`);
+    if (this.flags.postProcess) {
+      return new Promise( (resolve, reject) => {
+        try {
+          this.postProcess(thing, resolve, reject);
+        }
+        catch (e) {reject(e);}
+      });
+    } else {
+      return Promise.resolve(thing);
+    }
   }
 
   // just template methods here.
