@@ -57,15 +57,11 @@ class Hook {
   }
 
   _preProcess(thing) {
-    return (thing) => {
-      debug(`Hook ${this.name} - _preProcess()`);
-      return new Promise( (resolve, reject) => {
-        try {
-          this.preProcess(thing, resolve, reject);
-        }
-        catch (e) {console.log(e); reject(e);}
-      });
-    }
+    debug(`Hook ${this.name} - _preProcess()`);
+    return new Promise((resolve, reject) => {
+      this.preProcess(thing, resolve, reject);
+    })
+    .catch((e) => {console.log(e); reject(e);});
   }
 
   _execute(thing) {

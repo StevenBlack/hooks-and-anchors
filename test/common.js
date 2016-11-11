@@ -1,13 +1,17 @@
 'use strict';
 
 const debug = require('debug')('HNA');
-const Hook = require("../lib/").Hook;
+const Hook = require("../src/").Hook;
 
 class TallyHook extends Hook {
 
   preProcess(thing, resolve, reject)  {
-    debug(`Hook ${this.name} - preProcess()`);
-    setTimeout(this.randomTimeProcess.bind(this, thing, resolve, 'pre'), Math.random()*1000)
+    setTimeout( this.promiseTimeout, 2000, thing, this.name, resolve, reject);
+  }
+
+  promiseTimeout(thing, name, resolve, reject) {
+    debug(`Hook ${name} - preProcess() xxxxx`);
+    resolve(thing);
   }
 
   execute(thing, resolve, reject)  {

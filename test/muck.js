@@ -1,6 +1,6 @@
 'use strict';
 
-const Hook = require('../libtest/common.js').TallyHook;
+const Hook = require('../test/common.js').TallyHook;
 const Anchor = require('../src').Anchor;
 
 const a1 = new Anchor({'name': 'a1'});

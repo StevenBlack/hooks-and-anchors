@@ -11,7 +11,7 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var debug = require('debug')('HNA');
-var Hook = require("../lib/").Hook;
+var Hook = require("../src/").Hook;
 
 var TallyHook = function (_Hook) {
   _inherits(TallyHook, _Hook);
@@ -25,8 +25,13 @@ var TallyHook = function (_Hook) {
   _createClass(TallyHook, [{
     key: 'preProcess',
     value: function preProcess(thing, resolve, reject) {
-      debug('Hook ' + this.name + ' - preProcess()');
-      setTimeout(this.randomTimeProcess.bind(this, thing, resolve, 'pre'), Math.random() * 1000);
+      setTimeout(this.promiseTimeout, 2000, thing, this.name, resolve, reject);
+    }
+  }, {
+    key: 'promiseTimeout',
+    value: function promiseTimeout(thing, name, resolve, reject) {
+      debug('Hook ' + name + ' - preProcess() xxxxx');
+      resolve(thing);
     }
   }, {
     key: 'execute',
