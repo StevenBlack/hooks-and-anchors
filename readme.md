@@ -1,7 +1,7 @@
 # Hooks-And-Anchors [![Build Status](https://travis-ci.org/StevenBlack/hooks-and-anchors.svg?branch=master)](https://travis-ci.org/StevenBlack/hooks-and-anchors)
 
 ## Description
-Work in process.  
+This repo is under development.  
 
 
 ## Install
