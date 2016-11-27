@@ -175,6 +175,11 @@ class Anchor extends Hook {
   loadP(proc = [], postProc = []) {
     super.loadP(proc, postProc);
 
+    // close out the hook chain
+    while (postProc.length > 0) {
+      proc.push(postProc.pop());
+    }
+
     // iterate the hooks collection
     this.hooks.forEach((hook) => {
       if (this.isHook(hook)) {
