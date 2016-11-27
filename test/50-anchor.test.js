@@ -78,11 +78,11 @@ describe(`Tests in ${__filename}`, () => {
         postTally: 0
       };
       const anchor = new Anchor();
-      const hookA = new TallyHook();
-      const hookB = new TallyHook();
-      const hookC = new TallyHook();
-      const hookD = new TallyHook();
-      const hookE = new TallyHook();
+      const hookA = new TallyHook({name: "hookCollection_1"});
+      const hookB = new TallyHook({name: "hookCollection_2"});
+      const hookC = new TallyHook({name: "hookCollection_3"});
+      const hookD = new TallyHook({name: "hookChain_1"});
+      const hookE = new TallyHook({name: "hookChain_2"});
 
       anchor.hooks.push(hookA);
       anchor.hooks.push(hookB);
