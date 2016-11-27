@@ -24,19 +24,19 @@ var TallyHook = function (_Hook) {
     key: 'preProcess',
     value: function preProcess(thing, resolve, reject) {
       debug('Hook ' + this.name + ' - PreProcess()');
-      setTimeout(this.randomTimeProcess.bind(this, thing, resolve, 'pre'), Math.random() * 100);
+      setTimeout(this.randomTimeProcess.bind(this, thing, resolve, 'pre'), Math.random() * 400);
     }
   }, {
     key: 'execute',
     value: function execute(thing, resolve, reject) {
       debug('Hook ' + this.name + ' - execute()');
-      setTimeout(this.randomTimeProcess.bind(this, thing, resolve, 'exe'), Math.random() * 100);
+      setTimeout(this.randomTimeProcess.bind(this, thing, resolve, 'exe'), Math.random() * 400);
     }
   }, {
     key: 'postProcess',
     value: function postProcess(thing, resolve, reject) {
       debug('Hook ' + this.name + ' - postProcess()');
-      setTimeout(this.randomTimeProcess.bind(this, thing, resolve, 'post'), Math.random() * 100);
+      setTimeout(this.randomTimeProcess.bind(this, thing, resolve, 'post'), Math.random() * 400);
     }
   }, {
     key: 'randomTimeProcess',
