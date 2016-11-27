@@ -8,7 +8,7 @@ var Hook = require('../lib/').Hook;
 var TallyHook = require('../libtest/common.js').TallyHook;
 
 describe('Tests in ' + __filename, function () {
-  describe('Anchor standalone functionality', function () {
+  describe.skip('Anchor standalone functionality', function () {
     it('anchor default name is "Anchor"', function () {
       var anchor = new Anchor();
       anchor.should.have.property('name', 'Anchor');
@@ -76,17 +76,18 @@ describe('Tests in ' + __filename, function () {
         postTally: 0
       };
       var anchor = new Anchor();
-      var hookA = new TallyHook({ name: "hookCollection_1" });
-      var hookB = new TallyHook({ name: "hookCollection_2" });
-      var hookC = new TallyHook({ name: "hookCollection_3" });
-      var hookD = new TallyHook({ name: "hookChain_1" });
-      var hookE = new TallyHook({ name: "hookChain_2" });
+      var hookA = new TallyHook({ name: "hookChain_1" });
+      var hookB = new TallyHook({ name: "hookChain_2" });
+      var hookC = new TallyHook({ name: "hookCollection_1" });
+      var hookD = new TallyHook({ name: "hookCollection_2" });
+      var hookE = new TallyHook({ name: "hookCollection_3" });
 
-      anchor.hooks.push(hookA);
-      anchor.hooks.push(hookB);
+      anchor.setHook(hookA);
+      anchor.setHook(hookB);
+
       anchor.hooks.push(hookC);
-      anchor.setHook(hookD);
-      anchor.setHook(hookE);
+      anchor.hooks.push(hookD);
+      anchor.hooks.push(hookE);
 
       return anchor.process(testObj).then(function (testObj) {
         should(testObj).have.property('preTally', 5);
