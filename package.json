@@ -28,7 +28,7 @@
     "compile": "rm -rf lib/ && babel -d lib/ src/ && rm -rf libtest/ && babel -d libtest/ test/",
     "mocha": "npm run compile && mocha --opts mocha.opts",
     "test": "npm run compile && mocha --opts mocha.opts",
-    "t": "npm run compile && mocha --compilers js:babel-core/register ./libtest/06-hook.func.test.js"
+    "t": "npm run compile && mocha --compilers js:babel-core/register --timeout 5000 ./libtest/50-anchor.test.js"
   },
   "semistandard": {
     "env": [
