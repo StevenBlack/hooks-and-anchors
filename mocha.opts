@@ -1,2 +1,3 @@
 --recursive libtest/
 --compilers js:babel-core/register
+--timeout 5000
