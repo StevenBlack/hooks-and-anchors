@@ -149,13 +149,17 @@ class Hook {
     debug(`Hook ${this.name} - loadP()`);
     proc.push(this._preProcess.bind(this));
     proc.push(this._execute.bind(this));
-    postProc.unshift(this._postProcess.bind(this));
+
+    if (this.isHook(this.hook)) {
+      postProc.unshift(this._postProcess.bind(this));
+    } else {
+      proc.push(this._postProcess.bind(this))
+    }
 
     // go down the hook chain.
     if (this.isHook(this.hook)) {
       this.hook.loadP(proc, postProc);
     }
-    return;
   }
 }
 
@@ -177,7 +181,7 @@ class Anchor extends Hook {
         hook.loadP(proc, postProc);
       }
     });
-    return;
+
   }
 
   setFlags(flag = true) {
