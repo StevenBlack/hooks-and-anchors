@@ -173,7 +173,14 @@ class Anchor extends Hook {
   }
 
   loadP(proc = [], postProc = []) {
-    super.loadP(proc, postProc);
+    debug(`Hook ${this.name} - loadP()`);
+    proc.push(this._preProcess.bind(this));
+    proc.push(this._execute.bind(this));
+
+    // go down the hook chain.
+    if (this.isHook(this.hook)) {
+      this.hook.loadP(proc, postProc);
+    }
 
     // close out the hook chain
     while (postProc.length > 0) {
@@ -186,6 +193,14 @@ class Anchor extends Hook {
         hook.loadP(proc, postProc);
       }
     });
+
+    // close out the hook collection
+    while (postProc.length > 0) {
+      proc.push(postProc.pop());
+    }
+
+    // finally, this' postProcess
+    proc.push(this._postProcess.bind(this))
 
   }
 
