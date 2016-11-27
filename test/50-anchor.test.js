@@ -8,7 +8,7 @@ const Hook   = require('../lib/').Hook;
 const TallyHook = require('../libtest/common.js').TallyHook;
 
 describe(`Tests in ${__filename}`, () => {
-  describe.('Anchor standalone functionality', function(){
+  describe('Anchor standalone functionality', function(){
     it('anchor default name is "Anchor"', function(){
       const anchor = new Anchor();
       anchor.should.have.property('name', 'Anchor');
