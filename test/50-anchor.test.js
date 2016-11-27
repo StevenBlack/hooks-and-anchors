@@ -8,7 +8,7 @@ const Hook   = require('../lib/').Hook;
 const TallyHook = require('../libtest/common.js').TallyHook;
 
 describe(`Tests in ${__filename}`, () => {
-  describe('Anchor standalone functionality', function(){
+  describe.skip('Anchor standalone functionality', function(){
     it('anchor default name is "Anchor"', function(){
       const anchor = new Anchor();
       anchor.should.have.property('name', 'Anchor');
@@ -78,27 +78,28 @@ describe(`Tests in ${__filename}`, () => {
         postTally: 0
       };
       const anchor = new Anchor();
-      const hookA = new TallyHook({name: "hookCollection_1"});
-      const hookB = new TallyHook({name: "hookCollection_2"});
-      const hookC = new TallyHook({name: "hookCollection_3"});
-      const hookD = new TallyHook({name: "hookChain_1"});
-      const hookE = new TallyHook({name: "hookChain_2"});
+      const hookA = new TallyHook({name: "hookChain_1"});
+      const hookB = new TallyHook({name: "hookChain_2"});
+      const hookC = new TallyHook({name: "hookCollection_1"});
+      const hookD = new TallyHook({name: "hookCollection_2"});
+      const hookE = new TallyHook({name: "hookCollection_3"});
 
-      anchor.hooks.push(hookA);
-      anchor.hooks.push(hookB);
+      anchor.setHook(hookA);
+      anchor.setHook(hookB);
+
       anchor.hooks.push(hookC);
-      anchor.setHook(hookD);
-      anchor.setHook(hookE);
+      anchor.hooks.push(hookD);
+      anchor.hooks.push(hookE);
 
       return anchor.process(testObj)
-          .then((testObj) => {
-            should(testObj).have.property('preTally', 5);
-            should(testObj).have.property('exeTally', 5);
-            should(testObj).have.property('postTally', 5);
-          })
-          .catch((err) => {
-            console.dir(err);
-          });
+        .then((testObj) => {
+          should(testObj).have.property('preTally', 5);
+          should(testObj).have.property('exeTally', 5);
+          should(testObj).have.property('postTally', 5);
+        })
+        .catch((err) => {
+          console.dir(err);
+        });
     });
   });
 });
