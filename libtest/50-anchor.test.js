@@ -76,11 +76,11 @@ describe('Tests in ' + __filename, function () {
         postTally: 0
       };
       var anchor = new Anchor();
-      var hookA = new TallyHook();
-      var hookB = new TallyHook();
-      var hookC = new TallyHook();
-      var hookD = new TallyHook();
-      var hookE = new TallyHook();
+      var hookA = new TallyHook({ name: "hookCollection_1" });
+      var hookB = new TallyHook({ name: "hookCollection_2" });
+      var hookC = new TallyHook({ name: "hookCollection_3" });
+      var hookD = new TallyHook({ name: "hookChain_1" });
+      var hookE = new TallyHook({ name: "hookChain_2" });
 
       anchor.hooks.push(hookA);
       anchor.hooks.push(hookB);
