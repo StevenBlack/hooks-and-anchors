@@ -1,7 +1,6 @@
 'use strict';
 
 const debug = require('debug')('HNA');
-
 class Hook {
   constructor(options = {}) {
     // native properties of all hooks
@@ -32,62 +31,69 @@ class Hook {
     // set all flags to signal go!
     this.setFlags(true);
 
-    const implementation = (thing) => {
-      const proc = [];
-      const postProc = [];
+    const implementation = (thing2) => {
+      const postProc = [],
+        proc = [];
       this.loadP(proc, postProc);
 
-      let p = proc.shift()(thing);
-
+      let prom = proc.shift()(thing2);
       proc.forEach((func) => {
-          p = p.then(() => {return func(thing);});
+        prom = prom.then(() => func(thing2));
       });
       postProc.forEach((func) => {
-          p = p.then(() => {return func(thing);});
+        prom = prom.then(() => func(thing2));
       });
-      return p;
+
+      return prom;
     };
 
-    return implementation(thing)
-    .catch( (e) => {console.log(e);});
+    return implementation(thing).
+      catch((err) => {
+        console.log(err);
+      });
   }
 
   _preProcess(thing) {
     debug(`Hook ${this.name} - _preProcess()`);
-    return new Promise( (resolve, reject) => {
+
+    return new Promise((resolve, reject) => {
       try {
         this.preProcess(thing, resolve, reject);
+      } catch (err) {
+        console.log(err);
+        reject(err);
       }
-      catch (e) {console.log(e); reject(e);}
     });
   }
 
   _execute(thing) {
     debug(`Hook ${this.name} - _execute()`);
     if (this.flags.execute) {
-      return new Promise( (resolve, reject) => {
+      return new Promise((resolve, reject) => {
         try {
           this.execute(thing, resolve, reject);
+        } catch (err) {
+          reject(err);
         }
-        catch (e) {reject(e);}
       });
-    } else {
-      return Promise.resolve(thing);
     }
+
+    return Promise.resolve(thing);
   }
 
   _postProcess(thing) {
     debug(`Hook ${this.name} - _postProcess()`);
     if (this.flags.postProcess) {
-      return new Promise( (resolve, reject) => {
+      return new Promise((resolve, reject) => {
         try {
           this.postProcess(thing, resolve, reject);
+        } catch (err) {
+          reject(err);
         }
-        catch (e) {reject(e);}
       });
-    } else {
-      return Promise.resolve(thing);
     }
+
+    return Promise.resolve(thing);
   }
 
   // just template methods here.
@@ -106,21 +112,22 @@ class Hook {
     resolve(thing);
   }
 
-  setHook(hook, ...a) {
+  setHook(hook, ...otherArgs) {
     debug(`Hook ${this.name} - setHook()`);
     // append a hook to the hook chain.
     if (this.isHook(this.hook)) {
-      this.hook.setHook(hook, ...a);
+      this.hook.setHook(hook, ...otherArgs);
     } else {
       // hook could be a package name
-      if (typeof hook === 'string' ) {
-        return this.setHook(this.classInstanceFromString(hook, ...a));
+      if (typeof hook === 'string') {
+        return this.setHook(this.classInstanceFromString(hook, ...otherArgs));
       }
       // only allow hooks as hooks
       if (this.isHook(hook)) {
         this.hook = hook;
       }
     }
+
     return hook;
   }
 
@@ -137,12 +144,14 @@ class Hook {
 
   isHook(hook) {
     const type = typeof hook;
+
     return hook !== null && (type === 'object' || type === 'function') && ('hook' in hook);
   }
 
-  classInstanceFromString(packageLocation, ...a) {
+  classInstanceFromString(packageLocation, ...otherArgs) {
     const Temp = require(packageLocation);
-    return new Temp(...a);
+
+    return new Temp(...otherArgs);
   }
 
   loadP(proc = [], postProc = []) {
@@ -153,7 +162,7 @@ class Hook {
     if (this.isHook(this.hook)) {
       postProc.unshift(this._postProcess.bind(this));
     } else {
-      proc.push(this._postProcess.bind(this))
+      proc.push(this._postProcess.bind(this));
     }
 
     // go down the hook chain.
@@ -200,7 +209,7 @@ class Anchor extends Hook {
     }
 
     // finally, this' postProcess
-    proc.push(this._postProcess.bind(this))
+    proc.push(this._postProcess.bind(this));
 
   }
 
