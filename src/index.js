@@ -1,5 +1,4 @@
 'use strict';
-
 const debug = require('debug')('HNA');
 class Hook {
   constructor(options = {}) {
@@ -7,14 +6,10 @@ class Hook {
     this.name = options.name || 'Hook';
     this.settings = {};
     this.hook = undefined;
-    this.flags = {
-      execute: true,
-      hook: true,
-      postProcess: true
-    };
+    this.flags = { execute: true, hook: true, postProcess: true };
 
     // reckon the settings
-    this.defaults = {'name': 'Hook'};
+    this.defaults = { name: 'Hook' };
     Object.assign(this.settings, this.defaults, options);
     this.selfConfig();
   }
@@ -31,26 +26,24 @@ class Hook {
     // set all flags to signal go!
     this.setFlags(true);
 
-    const implementation = (thing2) => {
-      const postProc = [],
-        proc = [];
+    const implementation = thing2 => {
+      const postProc = [], proc = [];
       this.loadP(proc, postProc);
 
       let prom = proc.shift()(thing2);
-      proc.forEach((func) => {
+      proc.forEach(func => {
         prom = prom.then(() => func(thing2));
       });
-      postProc.forEach((func) => {
+      postProc.forEach(func => {
         prom = prom.then(() => func(thing2));
       });
 
       return prom;
     };
 
-    return implementation(thing).
-      catch((err) => {
-        console.log(err);
-      });
+    return implementation(thing).catch(err => {
+      console.log(err);
+    });
   }
 
   _preProcess(thing) {
@@ -145,7 +138,9 @@ class Hook {
   isHook(hook) {
     const type = typeof hook;
 
-    return hook !== null && (type === 'object' || type === 'function') && ('hook' in hook);
+    return hook !== null &&
+      (type === 'object' || type === 'function') &&
+      'hook' in hook;
   }
 
   classInstanceFromString(packageLocation, ...otherArgs) {
@@ -197,7 +192,7 @@ class Anchor extends Hook {
     }
 
     // iterate the hooks collection
-    this.hooks.forEach((hook) => {
+    this.hooks.forEach(hook => {
       if (this.isHook(hook)) {
         hook.loadP(proc, postProc);
       }
@@ -210,13 +205,12 @@ class Anchor extends Hook {
 
     // finally, this' postProcess
     proc.push(this._postProcess.bind(this));
-
   }
 
   setFlags(flag = true) {
     super.setFlags(flag);
 
-    this.hooks.forEach((hook) => {
+    this.hooks.forEach(hook => {
       // setFlags through the collection
       if (this.isHook(hook)) {
         hook.setFlags(flag);
@@ -225,7 +219,4 @@ class Anchor extends Hook {
   }
 }
 
-module.exports = {
-  Hook,
-  Anchor
-};
+module.exports = { Hook, Anchor };
