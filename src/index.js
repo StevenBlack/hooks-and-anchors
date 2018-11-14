@@ -154,7 +154,7 @@ class Hook {
     return new Temp(...otherArgs);
   }
 
-  loadP(proc = [], postProc = []) {
+  loadP(proc, postProc) {
     debug(`Hook ${this.name} - loadP()`);
     proc.push(this._preProcess.bind(this));
     proc.push(this._execute.bind(this));
