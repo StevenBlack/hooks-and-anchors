@@ -55,7 +55,7 @@
     "babel-preset-latest": "6.16.0",
     "chai": "^3.5.0",
     "debug": "^2.3.0",
-    "eslint": "^3.8.1",
+    "eslint": "^6.2.2",
     "eslint-config-standard": "^6.2.0",
     "eslint-if-supported": "1.0.1",
     "eslint-plugin-promise": "^3.3.0",
